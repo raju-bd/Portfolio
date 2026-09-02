@@ -178,7 +178,7 @@
       summary: 'A high-fidelity supply-chain visibility platform stitched together from procurement orders, vendor shipments, and live GPS coordinates. The application turns raw order data into a flowing map of where every consignment is in the network at any moment.',
       features: [
         'Custom APEX 23.2 interactive reports with cascading region-to-region drilldowns',
-        'ORDS 23.4 REST endpoints consumed by the OpenStreetMap canvas',
+        'ORDS 26.2 REST endpoints consumed by the OpenStreetMap canvas',
         'Procedural PL/SQL packages handling geo-fencing and route deviation alerts',
         'Multi-tenant access control via APEX Authorization schemes'
       ],
