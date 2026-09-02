@@ -1,0 +1,296 @@
+/* =====================================================
+   Md. Mahfuzul Amin — Portfolio
+   Interactions: theme toggle, magnetic hover, modal,
+   reveal animations, role rotator, count-up, cursor glow
+   ===================================================== */
+
+(function () {
+  'use strict';
+
+  /* ---------- THEME TOGGLE ---------- */
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const stored = localStorage.getItem('portfolio-theme');
+  if (stored) root.setAttribute('data-theme', stored);
+
+  themeToggle.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('portfolio-theme', next);
+  });
+
+  /* ---------- YEAR ---------- */
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* ---------- HAMBURGER ---------- */
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+
+  function closeNav() {
+    navLinks.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('click', onDocClick);
+  }
+  function onDocClick(e) {
+    if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) closeNav();
+  }
+
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const isOpen = navLinks.classList.contains('open');
+    if (isOpen) {
+      closeNav();
+    } else {
+      navLinks.classList.add('open');
+      hamburger.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      setTimeout(() => document.addEventListener('click', onDocClick), 0);
+    }
+  });
+
+  navLinks.querySelectorAll('a').forEach((a) => {
+    a.addEventListener('click', () => closeNav());
+  });
+
+  // Close on resize to desktop
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (window.innerWidth > 720) closeNav();
+    }, 150);
+  });
+
+  /* ---------- CURSOR GLOW ---------- */
+  const cursorGlow = document.getElementById('cursorGlow');
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let curX = mouseX, curY = mouseY;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+  });
+
+  function animateGlow() {
+    curX += (mouseX - curX) * 0.12;
+    curY += (mouseY - curY) * 0.12;
+    cursorGlow.style.left = curX + 'px';
+    cursorGlow.style.top = curY + 'px';
+    requestAnimationFrame(animateGlow);
+  }
+  animateGlow();
+
+  // Hide glow on touch devices
+  if ('ontouchstart' in window) cursorGlow.style.display = 'none';
+
+  /* ---------- MAGNETIC HOVER ---------- */
+  document.querySelectorAll('.magnetic').forEach((el) => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      el.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+    });
+  });
+
+  /* ---------- REVEAL ON SCROLL ---------- */
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const delay = entry.target.getAttribute('data-reveal-delay') || 0;
+        setTimeout(() => entry.target.classList.add('in'), Number(delay));
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach((el) => io.observe(el));
+
+  /* ---------- COUNT-UP STATS ---------- */
+  const counters = document.querySelectorAll('[data-count]');
+  const counterIO = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = Number(el.getAttribute('data-count'));
+        const duration = 1400;
+        const start = performance.now();
+        const animate = (now) => {
+          const t = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = Math.round(target * eased);
+          if (t < 1) requestAnimationFrame(animate);
+        };
+        requestAnimationFrame(animate);
+        counterIO.unobserve(el);
+      }
+    });
+  }, { threshold: 0.4 });
+  counters.forEach((c) => counterIO.observe(c));
+
+  /* ---------- ROLE ROTATOR ---------- */
+  const roles = [
+    'Enterprise Solutions Architect',
+    'Oracle APEX Specialist',
+    'IT Manager',
+    'Full-Stack Engineer',
+    'Database Migration Lead'
+  ];
+  const roleEl = document.getElementById('roleText');
+  let roleIdx = 0, charIdx = 0, deleting = false;
+  function tickRole() {
+    const role = roles[roleIdx];
+    if (!deleting) {
+      charIdx++;
+      roleEl.textContent = role.slice(0, charIdx);
+      if (charIdx === role.length) {
+        deleting = true;
+        setTimeout(tickRole, 1800);
+        return;
+      }
+      setTimeout(tickRole, 60);
+    } else {
+      charIdx--;
+      roleEl.textContent = role.slice(0, charIdx);
+      if (charIdx === 0) {
+        deleting = false;
+        roleIdx = (roleIdx + 1) % roles.length;
+        setTimeout(tickRole, 300);
+        return;
+      }
+      setTimeout(tickRole, 35);
+    }
+  }
+  if (roleEl) setTimeout(tickRole, 800);
+
+  /* ---------- PROJECT DATA + MODAL ---------- */
+  const projects = {
+    'svantex-traceability': {
+      title: 'Svantex Traceability System',
+      tag: 'Supply Chain Map Engine',
+      image: 'TraceabilityDashboard.png',
+      summary: 'A high-fidelity supply-chain visibility platform stitched together from procurement orders, vendor shipments, and live GPS coordinates. The application turns raw order data into a flowing map of where every consignment is in the network at any moment.',
+      features: [
+        'Custom APEX 23.2 interactive reports with cascading region-to-region drilldowns',
+        'ORDS 23.4 REST endpoints consumed by the OpenStreetMap canvas',
+        'Procedural PL/SQL packages handling geo-fencing and route deviation alerts',
+        'Multi-tenant access control via APEX Authorization schemes'
+      ],
+      challenges: 'Reconciling GPS jitter and weak GPS signals from low-end field devices. Solved with a Kalman-style smoothing routine in PL/SQL plus a confidence radius shown directly on the map.',
+      dbLayer: 'Oracle 19c with materialized views for fast map-tile refresh; partitioned tables for shipment logs.'
+    },
+    'svantex-tna': {
+      title: 'Svantex Time & Action (TNA)',
+      tag: 'Manufacturing Controller',
+      image: 'TNADashboard.png',
+      summary: 'A Time & Action controller for manufacturing operations. Every production run is broken into milestones with owners, deadlines, escalations, and follow-up logs surfaced in a single dashboard.',
+      features: [
+        'Stage-gate workflow editor with bulk follow-up updates',
+        'Dynamic forms driven by APEX collections and PL/SQL APIs',
+        'Role-based approval chain for stage transitions',
+        'Excel-grade export pipelines using ORDS / ORDS Printer'
+      ],
+      challenges: 'Coordinating dozens of concurrent milestones across cross-functional teams without losing audit history. Solved by append-only event tables and immutable audit triggers.',
+      dbLayer: 'Oracle 19c with APEX 20.2; sequences and triggers feed the timeline events.'
+    },
+    'hrms-geolocation': {
+      title: 'Enterprise HRMS & Live Geolocation',
+      tag: 'Personnel Tracking Infrastructure',
+      image: 'LeaveHome.png',
+      summary: 'A full HRMS stack — leave, attendance, payroll — fused with live field GPS tracking. Personnel in the field push coordinates through a mobile companion app; field managers see them on a glass-map dashboard in real time.',
+      features: [
+        'Leave application & multi-level approval workflow',
+        'Biometric punch ingestion from ZKTeco & Anviz devices via SOAP / REST bridges',
+        'Live geolocation canvas with personnel clusters and route history',
+        'Monthly overtime and attendance summaries (RDL reports)'
+      ],
+      challenges: 'Stabilizing the device-bridge for biometric punches during network drops. Solved with an on-device buffer and replay queue plus a watchdog service on Tomcat.',
+      dbLayer: 'Oracle 19c on CentOS, Apache Tomcat fronting APEX, encrypted credential vault for device secrets.'
+    }
+  };
+
+  const modal = document.getElementById('photomodal');
+  const modalMedia = document.getElementById('photomodalMedia');
+  const modalContent = document.getElementById('photomodalContent');
+  const modalClose = document.getElementById('photomodalClose');
+
+  function openProject(key) {
+    const p = projects[key];
+    if (!p) return;
+    modalMedia.innerHTML = `<img src="${p.image}" alt="${p.title}" />`;
+    modalContent.innerHTML = `
+      <span class="modal-tag">${p.tag}</span>
+      <h2>${p.title}</h2>
+      <p>${p.summary}</p>
+      <h4>Engineering Highlights</h4>
+      <ul class="modal-list">
+        ${p.features.map((f) => `<li>${f}</li>`).join('')}
+      </ul>
+      <h4>Challenges Solved</h4>
+      <p>${p.challenges}</p>
+      <h4>Database &amp; Infrastructure Layer</h4>
+      <p>${p.dbLayer}</p>
+      <div class="modal-stack">
+        <span class="chip">Oracle APEX</span>
+        <span class="chip">PL/SQL</span>
+        <span class="chip">ORDS</span>
+        <span class="chip">Oracle 19c</span>
+      </div>
+    `;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.project-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const key = card.getAttribute('data-project');
+      openProject(key);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openProject(card.getAttribute('data-project'));
+      }
+    });
+  });
+
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target.getAttribute('data-close')) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+
+  /* ---------- SMOOTH NAV HIGHLIGHT ---------- */
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.nav-links a');
+  const navIO = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navAnchors.forEach((a) => {
+          if (a.getAttribute('href') === '#' + id) {
+            a.style.color = 'var(--text)';
+          } else {
+            a.style.color = '';
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-50% 0px -45% 0px' });
+  sections.forEach((s) => navIO.observe(s));
+
+})();
