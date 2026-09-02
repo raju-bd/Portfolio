@@ -212,6 +212,34 @@
       ],
       challenges: 'Stabilizing the device-bridge for biometric punches during network drops. Solved with an on-device buffer and replay queue plus a watchdog service on Tomcat.',
       dbLayer: 'Oracle 19c on CentOS, Apache Tomcat fronting APEX, encrypted credential vault for device secrets.'
+    },
+    'procurement': {
+      title: 'Procurement Management & CS Approval',
+      tag: 'Procurement Workflow Engine',
+      image: 'ProcurementHome.png',
+      summary: 'A complete procurement pipeline covering requisition intake, vendor comparative statements (CS), and multi-stage approvals. The system auto-generates comparative analysis reports and dispatches email notifications to every approval stakeholder in the chain.',
+      features: [
+        'Requisition-to-PO workflow with role-based approval matrix',
+        'Comparative Statement (CS) generator with weighted scoring',
+        'Automated email notifications via Oracle AS 10g to each approval stakeholder',
+        'Crystal-report style PDF/Excel exports of approved CS sheets'
+      ],
+      challenges: 'Coordinating parallel approvals across geographically distributed approvers without losing audit history. Solved with a state-machine PL/SQL engine plus an outbox table driving the notification dispatcher.',
+      dbLayer: 'Oracle Database 11g with APEX 18 front-end; Oracle Application Server 10g handles the email notification pipeline and report rendering.'
+    },
+    'vehicle': {
+      title: 'Vehicle Management System',
+      tag: 'Fleet Operations Controller',
+      image: 'VehicleHome.png',
+      summary: 'A unified fleet operations platform covering repair requisitions, fuel billing, and scheduled maintenance. Every vehicle has a complete service history surfaced through an APEX-driven dashboard.',
+      features: [
+        'Repair requisition workflow with parts, labor and vendor cost tracking',
+        'Fuel billing ledger with mileage vs. consumption analytics',
+        'Preventive maintenance scheduler with service-due alerts',
+        'Vehicle-wise history reports (Oracle Reports integration)'
+      ],
+      challenges: 'Reconciling fuel receipts captured manually against actual pump readings. Solved with a tolerance-checked reconciliation routine that flags anomalies for supervisor review.',
+      dbLayer: 'Oracle Database 11g with APEX 18; Oracle Reports for printable service and requisition documents; PL/SQL packages for the maintenance scheduler.'
     }
   };
 
