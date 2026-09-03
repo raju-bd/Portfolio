@@ -307,7 +307,7 @@
     'apex-cdocp': {
       title: 'Oracle APEX Cloud Certified Developer Professional',
       tag: 'Professional · Cloud',
-      image: 'APEX24CDOCP.jpg',
+      image: 'APEX24CDOCP.png',
       certificate: 'Oracle APEX Cloud Developer Certified Professional.png',
       issuer: 'Oracle University',
       issued: 'Oracle APEX 24.x',
