@@ -270,7 +270,7 @@
       challenges: 'Reconciling fuel receipts captured manually against actual pump readings. Solved with a tolerance-checked reconciliation routine that flags anomalies for supervisor review.',
       dbLayer: 'Oracle Database 11g with APEX 18; Oracle Reports for printable service and requisition documents; PL/SQL packages for the maintenance scheduler.'
     },
-    'nageshwari-academy': {
+      'nageshwari-academy': {
       title: 'Nageshwari Doyamoyee Pilot Academy',
       tag: 'School Management System',
       image: 'NageshwariDoyamoyeePilotAcademy_Home.png',
@@ -285,6 +285,22 @@
       ],
       challenges: 'Managing concurrent exam-result entry and report card generation without locking core tables. Solved with APEX collections for draft entry and batch commit jobs using DBMS_SCHEDULER to flush results overnight.',
       dbLayer: 'Oracle Database 11g with Oracle APEX 18; PL/SQL packages for result computation and report rendering; BI Publisher templates for transcript and report-card PDFs.'
+    },
+    'birdem-qms': {
+      title: 'Birdem Hospital Queue Management System',
+      tag: 'Digital Queue Management',
+      image: 'QMS_Home.png',
+      summary: 'A full-featured queue management system for Birdem Hospital at Mirpur Technical, Dhaka. Patients register via a digital QR token system; tokens are served in order using automated voice announcements and a live queue display board.',
+      features: [
+        'Patient QR-token registration with service-department selection',
+        'Real-time queue display board showing current and upcoming token numbers',
+        'Automated voice calling of token numbers via a C# desktop application',
+        'Token reprinting and priority/passenger hold for walk-in patients',
+        'Department-wise counters with live status monitoring',
+        'Daily transaction reports and audit trails via Oracle Reports 6i'
+      ],
+      challenges: 'Synchronizing the Forms-based token server with the C# voice-announcement subsystem without dropped or duplicated calls. Solved with a poll-and-lock mechanism on a shared token-status table and a heartbeat watchdog in the C# service.',
+      dbLayer: 'Oracle Database 11g; Oracle Forms and Reports 6i at the core; a C# WinForms service handles audio playback for voice calling and drives the queue display board over a local TCP channel.'
     }
   };
 
