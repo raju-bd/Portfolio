@@ -244,14 +244,13 @@
   };
 
   const modal = document.getElementById('photomodal');
-  const modalMedia = document.getElementById('photomodalMedia');
+  const modalGrid = document.getElementById('photomodalGrid');
   const modalContent = document.getElementById('photomodalContent');
   const modalClose = document.getElementById('photomodalClose');
 
   function openProject(key) {
     const p = projects[key];
     if (!p) return;
-    modalMedia.innerHTML = `<img src="${p.image}" alt="${p.title}" />`;
     modalContent.innerHTML = `
       <span class="modal-tag">${p.tag}</span>
       <h2>${p.title}</h2>
@@ -278,6 +277,7 @@
   function closeModal() {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
+    if (modalGrid) modalGrid.classList.remove('single-col');
     document.body.style.overflow = '';
   }
 
@@ -373,31 +373,38 @@
   function openCert(key) {
     const c = certifications[key];
     if (!c) return;
-    modalMedia.innerHTML = c.certificate
-      ? `<img src="${c.certificate}" alt="${c.title} certificate" />`
-      : `<img src="${c.image}" alt="${c.title}" />`;
     modalContent.innerHTML = `
-      <div class="cert-modal-hero">
-        <img src="${c.image}" alt="${c.title}" />
+      <div class="cert-modal-top">
+        <img class="cert-modal-badge" src="${c.image}" alt="${c.title}" />
         <div class="cert-modal-meta">
-          <span class="cert-tag">${c.tag}</span>
-          <h2>${c.title}</h2>
-          <p style="margin:4px 0 0;color:var(--text-muted);font-size:13px;">Issued by ${c.issuer} · ${c.issued}</p>
+          <h2 class="cert-modal-title">${c.title}</h2>
+          <p class="cert-modal-issuer">Issued by <strong>${c.issuer}</strong> · ${c.issued}</p>
+        </div>
+        <span class="cert-tag cert-modal-tag-inline">${c.tag}</span>
+      </div>
+      <div class="cert-modal-body">
+        <div class="cert-modal-left">
+          <span class="modal-tag">Verified Credential</span>
+          <p>${c.summary}</p>
+          <h4>Validated Skills</h4>
+          <ul class="modal-list">
+            ${c.skills.map((s) => `<li>${s}</li>`).join('')}
+          </ul>
+          <a class="cert-visit-btn" href="${c.verifyUrl}" target="_blank" rel="noopener noreferrer">
+            <span>Visit Original Link</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+        <div class="cert-modal-right">
+          ${c.certificate
+            ? `<img src="${c.certificate}" alt="${c.title} certificate" />`
+            : `<img src="${c.image}" alt="${c.title}" />`}
         </div>
       </div>
-      <span class="modal-tag">Verified Credential</span>
-      <p>${c.summary}</p>
-      <h4>Validated Skills</h4>
-      <ul class="modal-list">
-        ${c.skills.map((s) => `<li>${s}</li>`).join('')}
-      </ul>
-      <a class="cert-visit-btn" href="${c.verifyUrl}" target="_blank" rel="noopener noreferrer">
-        <span>Visit Original Link</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      </a>
     `;
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
+    if (modalGrid) modalGrid.classList.add('single-col');
     document.body.style.overflow = 'hidden';
   }
 
