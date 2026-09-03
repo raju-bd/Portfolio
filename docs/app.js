@@ -307,7 +307,7 @@
     'apex-cdocp': {
       title: 'Oracle APEX Cloud Certified Developer Professional',
       tag: 'Professional · Cloud',
-      image: 'APEX24CDOCP.jpg',
+      image: 'APEX24CDOCP.png',
       issuer: 'Oracle University',
       issued: 'Oracle APEX 24.x',
       summary: 'The professional-level credential validating production-grade expertise in building, securing, deploying, and maintaining Oracle APEX applications on Oracle Cloud Infrastructure.',
