@@ -302,6 +302,111 @@
     if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
   });
 
+  /* ---------- CERTIFICATION DATA + MODAL ---------- */
+  const certifications = {
+    'apex-cdocp': {
+      title: 'Oracle APEX Cloud Certified Developer Professional',
+      tag: 'Professional · Cloud',
+      image: 'APEX24CDOCP.jpg',
+      issuer: 'Oracle University',
+      issued: 'Oracle APEX 24.x',
+      summary: 'The professional-level credential validating production-grade expertise in building, securing, deploying, and maintaining Oracle APEX applications on Oracle Cloud Infrastructure.',
+      skills: [
+        'Designing responsive APEX applications using the latest low-code capabilities',
+        'Implementing server-side logic with PL/SQL, collections, and APIs',
+        'Securing applications using APEX built-in authentication and authorization schemes',
+        'Deploying and managing APEX applications on Oracle Autonomous Database / OCI'
+      ],
+      verifyUrl: 'https://catalog-education.oracle.com/ords/certview/sharebadge?id=4CC4DAD4B507063ACD9EB59EF04579D403273491B6D1369E75FAB3C415B35F88'
+    },
+    'forms-ocp': {
+      title: 'Oracle Forms Developer Certified Professional',
+      tag: 'Professional · Legacy Stack',
+      image: 'Oracle-Certification-badge_OC-Professional.png',
+      issuer: 'Oracle University',
+      issued: 'Oracle Forms',
+      summary: 'Advanced certification confirming expert-level command of Oracle Forms development — including form design, triggers, LOVs, alerts, and integration with database-side PL/SQL.',
+      skills: [
+        'Architecting scalable Oracle Forms modules for enterprise operations',
+        'Designing complex triggers, alerts, and validation logic',
+        'Integrating Forms with Reports, PL/SQL libraries, and external services',
+        'Migrating and modernizing legacy Forms assets alongside APEX'
+      ],
+      verifyUrl: 'https://www.credly.com/earner/earned/badge/fdeecbad-8d2d-47b3-9f1b-70b01fd4a304'
+    },
+    'plsql-oca': {
+      title: 'Oracle PL/SQL Developer Certified Associate',
+      tag: 'Associate · Procedural SQL',
+      image: 'Oracle_PL_SQL_Developer_Associate.png',
+      issuer: 'Oracle University',
+      issued: 'Oracle Database',
+      summary: 'Foundational credential certifying proficiency in the PL/SQL language — including block structure, control statements, cursors, exceptions, and stored program units.',
+      skills: [
+        'Writing robust PL/SQL blocks, procedures, functions, and packages',
+        'Managing cursors, exceptions, and bulk operations',
+        'Working with collections, records, and object types',
+        'Trigger design and dependency management'
+      ],
+      verifyUrl: 'https://www.credly.com/earner/earned/badge/08e867ed-440c-4430-8a17-54303da6076f'
+    },
+    'sql-expert': {
+      title: 'Oracle Database SQL Certified Expert',
+      tag: 'Expert · SQL',
+      image: 'Oracle-Certification-badge_OC-CertifiedExpert.png',
+      issuer: 'Oracle University',
+      issued: 'Oracle Database SQL',
+      summary: 'Expert-level SQL certification validating command of advanced query techniques, DML/DDL operations, constraints, joins, set operators, and analytic functions.',
+      skills: [
+        'Authoring complex multi-table joins, subqueries, and set operations',
+        'Applying analytic and ranking functions for reporting workloads',
+        'Schema design, constraints, indexes, and DDL management',
+        'Performance-aware query design for high-volume enterprise datasets'
+      ],
+      verifyUrl: 'https://www.credly.com/earner/earned/badge/bd760dc7-3451-4379-8ba0-e14448148186'
+    }
+  };
+
+  function openCert(key) {
+    const c = certifications[key];
+    if (!c) return;
+    modalMedia.innerHTML = '';
+    modalContent.innerHTML = `
+      <div class="cert-modal-hero">
+        <img src="${c.image}" alt="${c.title}" />
+        <div class="cert-modal-meta">
+          <span class="cert-tag">${c.tag}</span>
+          <h2>${c.title}</h2>
+          <p style="margin:4px 0 0;color:var(--text-muted);font-size:13px;">Issued by ${c.issuer} · ${c.issued}</p>
+        </div>
+      </div>
+      <span class="modal-tag">Verified Credential</span>
+      <p>${c.summary}</p>
+      <h4>Validated Skills</h4>
+      <ul class="modal-list">
+        ${c.skills.map((s) => `<li>${s}</li>`).join('')}
+      </ul>
+      <a class="cert-visit-btn" href="${c.verifyUrl}" target="_blank" rel="noopener noreferrer">
+        <span>Visit Original Link</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    `;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  document.querySelectorAll('.cert-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      openCert(card.getAttribute('data-cert'));
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openCert(card.getAttribute('data-cert'));
+      }
+    });
+  });
+
   /* ---------- SMOOTH NAV HIGHLIGHT ---------- */
   const sections = document.querySelectorAll('section[id]');
   const navAnchors = document.querySelectorAll('.nav-links a');
