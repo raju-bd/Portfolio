@@ -269,6 +269,22 @@
       ],
       challenges: 'Reconciling fuel receipts captured manually against actual pump readings. Solved with a tolerance-checked reconciliation routine that flags anomalies for supervisor review.',
       dbLayer: 'Oracle Database 11g with APEX 18; Oracle Reports for printable service and requisition documents; PL/SQL packages for the maintenance scheduler.'
+    },
+    'nageshwari-academy': {
+      title: 'Nageshwari Doyamoyee Pilot Academy',
+      tag: 'School Management System',
+      image: 'NageshwariDoyamoyeePilotAcademy_Home.png',
+      summary: 'A full-feature school management system deployed for a premier educational institution. The platform covers student admissions, academic results, class scheduling, attendance tracking, exam administration, and report generation — all driven through Oracle APEX.',
+      features: [
+        'Student admissions pipeline with document verification and seat allocation',
+        'Academic result management with mark entry, grading scales, and transcript generation',
+        'Class scheduling engine with teacher-subject allocation and room assignment',
+        'Daily attendance tracking with automated SMS notifications to parents',
+        'Exam administration with hall-ticket generation and performance analytics',
+        'Role-based dashboards for admins, teachers, and parents'
+      ],
+      challenges: 'Managing concurrent exam-result entry and report card generation without locking core tables. Solved with APEX collections for draft entry and batch commit jobs using DBMS_SCHEDULER to flush results overnight.',
+      dbLayer: 'Oracle Database 11g with Oracle APEX 18; PL/SQL packages for result computation and report rendering; BI Publisher templates for transcript and report-card PDFs.'
     }
   };
 

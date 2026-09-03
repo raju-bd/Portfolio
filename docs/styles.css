@@ -1274,9 +1274,15 @@ img { max-width: 100%; display: block; }
     max-height: calc(100vh - 110px);
     overflow-y: auto;
   }
-  [data-theme="light"] .nav-links {
-    background: rgba(255, 255, 255, 0.85);
-  }
+   [data-theme="light"] .nav-links {
+     background: rgba(255, 255, 255, 0.85);
+   }
+   [data-theme="light"] .nav-links.open {
+     -webkit-backdrop-filter: blur(34px) saturate(200%);
+     backdrop-filter: blur(34px) saturate(200%);
+     background: rgba(255, 255, 255, 0.52);
+     border: 1px solid rgba(15, 23, 42, 0.18);
+   }
   .nav-links.open {
     opacity: 1;
     visibility: visible;
@@ -1286,7 +1292,70 @@ img { max-width: 100%; display: block; }
   }
   .nav-links li { padding: 8px 0; border-bottom: 1px solid var(--border); }
   .nav-links li:last-child { border-bottom: none; }
-  .nav-links a { font-size: 18px; }
+  .nav-links a {
+    font-size: 18px;
+    padding: 12px 10px;
+    border-radius: 10px;
+    display: block;
+    position: relative;
+    overflow: visible;
+    transition: background var(--transition), transform var(--transition), color var(--transition);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-links a::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 10% 30%, rgba(255,255,255,0.14), transparent 20%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.06), transparent 25%),
+      linear-gradient(90deg, transparent, rgba(248,0,0,0.08), rgba(79,125,255,0.08), transparent);
+    filter: blur(8px);
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity var(--transition), transform var(--transition);
+    background-size: 220% 100%;
+    background-position: -40% 0;
+  }
+  .nav-links a:hover::before,
+  .nav-links a:focus::before,
+  .nav-links a:active::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .nav-links a:hover,
+  .nav-links a:focus,
+  .nav-links a:active {
+    background: linear-gradient(135deg, rgba(248,0,0,0.11), rgba(79,125,255,0.08));
+    color: var(--text);
+    transform: translateY(-3px);
+    -webkit-backdrop-filter: blur(28px) saturate(220%);
+    backdrop-filter: blur(28px) saturate(220%);
+    border: 1px solid rgba(255,255,255,0.22);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  /* liquid glass flow: animated sheen that slides across the frosted surface */
+  @keyframes navLiquidSheen {
+    0% { background-position: -60% 0; }
+    100% { background-position: 160% 0; }
+  }
+  .nav-links.open a:hover::before,
+  .nav-links.open a:focus::before {
+    opacity: 1;
+    transform: scale(1);
+    animation: navLiquidSheen 1400ms ease-in-out infinite;
+  }
+
+  /* liquid glass container effect — backdrop blur intensifies when menu is open */
+  .nav-links.open {
+    -webkit-backdrop-filter: blur(34px) saturate(200%);
+    backdrop-filter: blur(34px) saturate(200%);
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+  }
   .hamburger { display: block; }
   .hero { padding: 130px 0 60px; }
   .hero-title { letter-spacing: -1px; }
