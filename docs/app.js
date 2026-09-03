@@ -407,6 +407,54 @@
     });
   });
 
+  /* ---------- COOKIE CONSENT + GA GATING ---------- */
+  const COOKIE_KEY = 'portfolio-cookie-consent';
+  const cookieBanner = document.getElementById('cookieBanner');
+  const cookieAccept = document.getElementById('cookieAccept');
+  const cookieDecline = document.getElementById('cookieDecline');
+
+  function setConsent(value) {
+    try { localStorage.setItem(COOKIE_KEY, value); } catch (e) { /* ignore */ }
+    if (typeof window.gtag === 'function') {
+      window.gtag('consent', 'update', {
+        analytics_storage: value === 'accepted' ? 'granted' : 'denied'
+      });
+    }
+  }
+
+  let storedConsent = null;
+  try { storedConsent = localStorage.getItem(COOKIE_KEY); } catch (e) { /* ignore */ }
+
+  if (storedConsent === 'accepted' || storedConsent === 'declined') {
+    setConsent(storedConsent);
+  } else {
+    // Default GA consent to denied until user chooses
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(['consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    }]);
+    setTimeout(() => {
+      if (cookieBanner) cookieBanner.classList.add('show');
+    }, 1200);
+  }
+
+  if (cookieAccept) {
+    cookieAccept.addEventListener('click', () => {
+      setConsent('accepted');
+      cookieBanner.classList.remove('show');
+    });
+  }
+  if (cookieDecline) {
+    cookieDecline.addEventListener('click', () => {
+      setConsent('declined');
+      cookieBanner.classList.remove('show');
+    });
+  }
+
   /* ---------- SMOOTH NAV HIGHLIGHT ---------- */
   const sections = document.querySelectorAll('section[id]');
   const navAnchors = document.querySelectorAll('.nav-links a');
