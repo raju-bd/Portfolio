@@ -27,29 +27,58 @@
   /* ---------- HAMBURGER ---------- */
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
+  let navOpenedAt = 0;
 
   function closeNav() {
     navLinks.classList.remove('open');
     hamburger.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
-    document.removeEventListener('click', onDocClick);
-  }
-  function onDocClick(e) {
-    if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) closeNav();
   }
 
-  hamburger.addEventListener('click', (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+  function toggleNav(e) {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     const isOpen = navLinks.classList.contains('open');
     if (isOpen) {
       closeNav();
     } else {
+      navOpenedAt = Date.now();
       navLinks.classList.add('open');
       hamburger.classList.add('open');
       hamburger.setAttribute('aria-expanded', 'true');
-      setTimeout(() => document.addEventListener('click', onDocClick), 0);
     }
+  }
+
+  // Delegated document click — close when clicking outside hamburger or menu.
+  // Guard with a 350ms window to avoid the click that opened the menu closing it.
+  document.addEventListener('click', (e) => {
+    if (!navLinks.classList.contains('open')) return;
+    if (Date.now() - navOpenedAt < 350) return;
+    if (hamburger.contains(e.target) || navLinks.contains(e.target)) return;
+    closeNav();
+  });
+
+  // Open on touch immediately (avoids iOS 300ms delay)
+  // Use a flag to prevent the subsequent synthetic click from toggling it shut
+  let touchHandled = false;
+  hamburger.addEventListener('touchstart', (e) => {
+    if (!navLinks.classList.contains('open')) {
+      e.preventDefault();
+      touchHandled = true;
+      toggleNav();
+      setTimeout(() => { touchHandled = false; }, 400);
+    }
+  }, { passive: false });
+
+  hamburger.addEventListener('click', (e) => {
+    if (touchHandled) {
+      e.stopPropagation();
+      e.preventDefault();
+      return;
+    }
+    toggleNav(e);
   });
 
   navLinks.querySelectorAll('a').forEach((a) => {
