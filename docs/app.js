@@ -407,6 +407,28 @@
     });
   });
 
+  /* ---------- GO TO TOP ---------- */
+  const goTop = document.getElementById('goTop');
+  if (goTop) {
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (window.scrollY > 400) {
+            goTop.classList.add('show');
+          } else {
+            goTop.classList.remove('show');
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+    goTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
   /* ---------- COOKIE CONSENT + GA GATING ---------- */
   const COOKIE_KEY = 'portfolio-cookie-consent';
   const cookieBanner = document.getElementById('cookieBanner');
