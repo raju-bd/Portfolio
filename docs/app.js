@@ -307,7 +307,8 @@
     'apex-cdocp': {
       title: 'Oracle APEX Cloud Certified Developer Professional',
       tag: 'Professional · Cloud',
-      image: 'APEX24CDOCP.png',
+      image: 'APEX24CDOCP.jpg',
+      certificate: 'Oracle APEX Cloud Developer Certified Professional.png',
       issuer: 'Oracle University',
       issued: 'Oracle APEX 24.x',
       summary: 'The professional-level credential validating production-grade expertise in building, securing, deploying, and maintaining Oracle APEX applications on Oracle Cloud Infrastructure.',
@@ -323,6 +324,7 @@
       title: 'Oracle Forms Developer Certified Professional',
       tag: 'Professional · Legacy Stack',
       image: 'Oracle-Certification-badge_OC-Professional.png',
+      certificate: 'Oracle Forms Developer Certified Professional .png',
       issuer: 'Oracle University',
       issued: 'Oracle Forms',
       summary: 'Advanced certification confirming expert-level command of Oracle Forms development — including form design, triggers, LOVs, alerts, and integration with database-side PL/SQL.',
@@ -338,6 +340,7 @@
       title: 'Oracle PL/SQL Developer Certified Associate',
       tag: 'Associate · Procedural SQL',
       image: 'Oracle_PL_SQL_Developer_Associate.png',
+      certificate: 'Oracle PL_SQL Developer Certified Associate.png',
       issuer: 'Oracle University',
       issued: 'Oracle Database',
       summary: 'Foundational credential certifying proficiency in the PL/SQL language — including block structure, control statements, cursors, exceptions, and stored program units.',
@@ -353,6 +356,7 @@
       title: 'Oracle Database SQL Certified Expert',
       tag: 'Expert · SQL',
       image: 'Oracle-Certification-badge_OC-CertifiedExpert.png',
+      certificate: 'Oracle Database SQL Certified Expert.png',
       issuer: 'Oracle University',
       issued: 'Oracle Database SQL',
       summary: 'Expert-level SQL certification validating command of advanced query techniques, DML/DDL operations, constraints, joins, set operators, and analytic functions.',
@@ -369,7 +373,9 @@
   function openCert(key) {
     const c = certifications[key];
     if (!c) return;
-    modalMedia.innerHTML = '';
+    modalMedia.innerHTML = c.certificate
+      ? `<img src="${c.certificate}" alt="${c.title} certificate" />`
+      : `<img src="${c.image}" alt="${c.title}" />`;
     modalContent.innerHTML = `
       <div class="cert-modal-hero">
         <img src="${c.image}" alt="${c.title}" />
