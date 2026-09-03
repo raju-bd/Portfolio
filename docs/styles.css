@@ -835,7 +835,9 @@ img { max-width: 100%; display: block; }
 }
 .cert-card:hover .cert-cta { color: var(--text); }
 
-/* Cert modal layout: top header + two-column body */
+/* Cert modal (dedicated) layout: top header + two-column body */
+.cert-modal-content { display: block; }
+
 .cert-modal-top {
   display: flex;
   align-items: center;
@@ -875,7 +877,7 @@ img { max-width: 100%; display: block; }
 
 .cert-modal-body {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: 1.05fr 1fr;
   gap: 24px;
   align-items: start;
 }
@@ -889,20 +891,15 @@ img { max-width: 100%; display: block; }
   place-items: center;
   padding: 8px;
   min-height: 280px;
+  position: sticky;
+  top: 0;
 }
 .cert-modal-right img {
   width: 100%;
   height: auto;
-  max-height: 60vh;
+  max-height: 62vh;
   object-fit: contain;
   border-radius: 8px;
-}
-
-@media (max-width: 720px) {
-  .cert-modal-title { white-space: normal; font-size: 18px; }
-  .cert-modal-body { grid-template-columns: 1fr; }
-  .cert-modal-top { flex-wrap: wrap; }
-  .cert-modal-tag-inline { order: 3; }
 }
 .cert-visit-btn {
   display: inline-flex;
@@ -1037,9 +1034,22 @@ img { max-width: 100%; display: block; }
 
 .photomodal-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 28px;
   align-items: start;
+}
+.photomodal-media {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+  min-height: 360px;
+  display: grid; place-items: center;
+}
+.photomodal-media img {
+  width: 100%; height: auto;
+  object-fit: contain;
+  max-height: 70vh;
 }
 .photomodal-content h2 {
   font-family: 'Sora', sans-serif;
@@ -1283,8 +1293,27 @@ img { max-width: 100%; display: block; }
   .section { padding: 70px 0; }
   .timeline { padding-left: 28px; }
   .timeline-marker { left: -24px; }
-  .photomodal-shell { padding: 20px; }
+
+  /* Modals */
+  .photomodal { padding: 12px; }
+  .photomodal-shell { padding: 20px; max-height: 94vh; border-radius: 20px; }
+  .photomodal-close { top: 12px; right: 12px; width: 36px; height: 36px; }
   .photomodal-content h2 { font-size: 24px; }
+
+  .photomodal-grid { grid-template-columns: 1fr; gap: 18px; }
+  .photomodal-media { min-height: 220px; }
+  .photomodal-media img { max-height: 50vh; }
+
+  /* Cert modal */
+  .cert-modal-top { flex-wrap: wrap; gap: 12px; padding-bottom: 14px; margin-bottom: 14px; }
+  .cert-modal-badge { width: 48px; height: 48px; }
+  .cert-modal-title { font-size: 17px; white-space: normal; }
+  .cert-modal-issuer { font-size: 12px; }
+  .cert-modal-tag-inline { order: 3; }
+  .cert-modal-body { grid-template-columns: 1fr; gap: 18px; }
+  .cert-modal-right { min-height: 200px; position: static; }
+  .cert-modal-right img { max-height: 45vh; }
+  .cert-visit-btn { width: 100%; justify-content: center; }
 }
 @media (max-width: 420px) {
   .hero-actions .btn { flex: 1; justify-content: center; }

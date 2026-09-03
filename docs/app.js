@@ -244,13 +244,14 @@
   };
 
   const modal = document.getElementById('photomodal');
-  const modalGrid = document.getElementById('photomodalGrid');
+  const modalMedia = document.getElementById('photomodalMedia');
   const modalContent = document.getElementById('photomodalContent');
   const modalClose = document.getElementById('photomodalClose');
 
   function openProject(key) {
     const p = projects[key];
     if (!p) return;
+    modalMedia.innerHTML = `<img src="${p.image}" alt="${p.title}" />`;
     modalContent.innerHTML = `
       <span class="modal-tag">${p.tag}</span>
       <h2>${p.title}</h2>
@@ -277,7 +278,6 @@
   function closeModal() {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
-    if (modalGrid) modalGrid.classList.remove('single-col');
     document.body.style.overflow = '';
   }
 
@@ -302,7 +302,11 @@
     if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
   });
 
-  /* ---------- CERTIFICATION DATA + MODAL ---------- */
+  /* ---------- CERTIFICATION DATA + DEDICATED MODAL ---------- */
+  const certModal = document.getElementById('certModal');
+  const certModalContent = document.getElementById('certModalContent');
+  const certModalClose = document.getElementById('certModalClose');
+
   const certifications = {
     'apex-cdocp': {
       title: 'Oracle APEX Cloud Certified Developer Professional',
@@ -373,11 +377,11 @@
   function openCert(key) {
     const c = certifications[key];
     if (!c) return;
-    modalContent.innerHTML = `
+    certModalContent.innerHTML = `
       <div class="cert-modal-top">
         <img class="cert-modal-badge" src="${c.image}" alt="${c.title}" />
         <div class="cert-modal-meta">
-          <h2 class="cert-modal-title">${c.title}</h2>
+          <h2 class="cert-modal-title" id="certModalTitle">${c.title}</h2>
           <p class="cert-modal-issuer">Issued by <strong>${c.issuer}</strong> · ${c.issued}</p>
         </div>
         <span class="cert-tag cert-modal-tag-inline">${c.tag}</span>
@@ -396,16 +400,19 @@
           </a>
         </div>
         <div class="cert-modal-right">
-          ${c.certificate
-            ? `<img src="${c.certificate}" alt="${c.title} certificate" />`
-            : `<img src="${c.image}" alt="${c.title}" />`}
+          <img src="${c.certificate || c.image}" alt="${c.title} certificate" />
         </div>
       </div>
     `;
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-    if (modalGrid) modalGrid.classList.add('single-col');
+    certModal.classList.add('open');
+    certModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+  }
+
+  function closeCertModal() {
+    certModal.classList.remove('open');
+    certModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
   }
 
   document.querySelectorAll('.cert-card').forEach((card) => {
@@ -418,6 +425,14 @@
         openCert(card.getAttribute('data-cert'));
       }
     });
+  });
+
+  certModalClose.addEventListener('click', closeCertModal);
+  certModal.addEventListener('click', (e) => {
+    if (e.target.getAttribute('data-cert-close')) closeCertModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && certModal.classList.contains('open')) closeCertModal();
   });
 
   /* ---------- GO TO TOP ---------- */
